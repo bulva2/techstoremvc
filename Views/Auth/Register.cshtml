@@ -1,0 +1,30 @@
+﻿@using TechStoreMVC.Models.Auth
+@model LoginViewModel
+
+@{
+	ViewBag.Title = "Register";
+}
+
+<h1 class="display-3 text-center">Vítejte! Vytvořte si nový účet ^^</h1>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-@TempData["MessageType"]" role="alert">
+        @TempData["Message"]
+    </div>
+}
+
+<form asp-action="Register">
+    <div class="mb-3">
+        <label for="Username" class="form-label">Username</label>
+        <input asp-for="Username" type="text" class="form-control" id="Username">
+        <span class="text-danger" asp-validation-for="Username"></span>
+    </div>
+    <div class="mb-3">
+        <label for="Password" class="form-label">Password</label>
+        <input asp-for="Password" type="password" class="form-control" id="Password" aria-describedby="emailHelp">
+        <span class="text-danger" asp-validation-for="Password"></span>
+        <div id="emailHelp" class="form-text">Your password is safely encrypted.</div>
+    </div>
+    <button type="submit" class="btn btn-success">Zaregistrovat se</button>
+</form>

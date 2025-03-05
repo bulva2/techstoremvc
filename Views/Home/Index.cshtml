@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center margin-20">
+    <h1 class="display-1">Techy.cz ~ MVC Powered e-shop</h1>
+    <p>Very lightweight ASP.NET webstore</p>
+    <a class="btn btn-primary" href="#categories">View Categories</a>
+</div>
+
+<div id="categories" class="container">
+    <h1 class="display-2 text-center mb-5">Categories</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-4 text-center">
+            <h5 class="display-5">Processors</h5>
+            <ul class="list-unstyled">
+                <li class="font-size24">Gaming CPUs</li>
+                <li><a asp-action="Index" asp-controller="Category" asp-route-categoryName="CPU">Ryzen CPUs</a></li>
+                <li><a asp-action="Index" asp-controller="Category" asp-route-categoryName="CPU">Intel CPUs</a></li>
+
+                <li class="font-size24 mt-2">Server CPUs</li>
+                <li><a asp-action="Index" asp-controller="Category" asp-route-categoryName="CPU">AMD Epyc CPUs</a></li>
+                <li><a asp-action="Index" asp-controller="Category" asp-route-categoryName="CPU">Intel Xeon CPUs</a></li>
+            </ul>
+        </div>
+        <div class="col-md-4 text-center">
+            <h5 class="display-5">Graphics Cards</h5>
+            <ul class="list-unstyled">
+                <li class="font-size24">Gaming GPUs</li>
+                <li><a asp-action="Index" asp-controller="Category" asp-route-categoryName="GPU">NVIDIA GPUs</a></li>
+                <li><a asp-action="Index" asp-controller="Category" asp-route-categoryName="GPU">Radeon GPUs</a></li>
+
+                <li class="font-size24 mt-2">Server GPUs</li>
+                <li><a asp-action="Index" asp-controller="Category" asp-route-categoryName="GPU">NVIDIA Quadro</a></li>
+            </ul>
+        </div>
+        <div class="col-md-4 text-center">
+            <h5 class="display-5">Memory (RAM)</h5>
+            <ul class="list-unstyled">
+                <li class="font-size24">Desktop RAM</li>
+                <li><a asp-action="Index" asp-controller="Category" asp-route-categoryName="RAM">DDR5 Memory</a></li>
+                <li><a asp-action="Index" asp-controller="Category" asp-route-categoryName="RAM">DDR4 Memory</a></li>
+
+                <li class="font-size24 mt-2">Laptop RAM</li>
+                <li><a asp-action="Index" asp-controller="Category" asp-route-categoryName="RAM">Laptop DDR5 Memory</a></li>
+                <li><a asp-action="Index" asp-controller="Category" asp-route-categoryName="RAM">Laptop DDR4 Memory</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+

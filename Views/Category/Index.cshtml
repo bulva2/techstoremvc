@@ -1,0 +1,55 @@
+﻿@using TechStoreMVC.Entities
+@using TechStoreMVC.Models.Category
+@model CategoryViewModel
+
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+	ViewData["Title"] = Model.Name;
+}
+
+<h1 class="text-center">@Model.Name</h1>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-@TempData["MessageType"]" role="alert">
+        @TempData["Message"]
+    </div>
+}
+
+<table class="table text-center">
+    <thead>
+        <tr>
+            @if (ViewBag.Role == "admin")
+            {
+                <th scope="col">#</th>
+            }
+            <th scope="col">Brand</th>
+            <th scope="col">Model</th>
+            <th scope="col">Price</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Product p in Model.Products)
+        {
+            <tr>
+                @if (ViewBag.Role == "admin")
+                {
+                    <td>@p.Id</td>
+                }
+                <td>@p.Brand</td>
+                <td>@p.Model</td>
+				<td>@p.Price</td>
+                <td>
+                    <form asp-action="AddToBasket" asp-controller="Basket" asp-route-id="@p.Id" asp-route-category="@Model.Name">
+                        <input asp-for="Quantity" type="number">
+                        <button type="submit" class="btn btn-light">Přidat do košíku</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

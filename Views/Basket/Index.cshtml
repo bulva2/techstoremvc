@@ -1,0 +1,53 @@
+﻿@using TechStoreMVC.Entities
+@using TechStoreMVC.Models.Basket
+@model BasketViewModel
+@{
+	ViewData["Title"] = "Basket";
+}
+
+<h2>Basket 🛒</h2>
+
+@if (TempData["Message"] != null)
+{
+	<div class="alert alert-@TempData["MessageType"]" role="alert">
+		@TempData["Message"]
+	</div>
+}
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				Product
+			</th>
+			<th>
+				Quantity
+			</th>
+			<th>
+				Price
+			</th>
+			<th>
+				Actions
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (BasketItem item in Model.BasketItems)
+		{
+			<tr>
+				<td>
+					@item.Product.Brand @item.Product.Model
+				</td>
+				<td>
+					@item.Quantity
+				</td>
+				<td>
+					@item.CalculatedPrice
+				</td>
+				<td>
+					<a class="btn btn-danger" asp-controller="Basket" asp-action="Remove" asp-route-id="@item.Id">Remove</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
