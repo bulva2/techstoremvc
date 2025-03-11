@@ -33,10 +33,14 @@ public class Product
     [Precision(11)]
     public decimal Price { get; set; }
 
+    public string Description { get; set; }
+
     [ForeignKey("CategoryId")]
     public virtual Category? Category { get; set; }
 
-    public Product(int id, string? brand, string model, string? type, decimal price, Category? category)
+    public string PriceText => $"{Price} CZK";
+
+    public Product(int id, string? brand, string model, string? type, decimal price, string description, Category? category)
     {
         Id = id;
         CategoryId = category?.Id;
@@ -45,16 +49,18 @@ public class Product
         Type = type;
         Price = price;
         Category = category;
+        Description = description;
     }
 
     public Product()
     {
         Id = 0;
         CategoryId = 0;
-        Brand = null;
-        Model = null!;
-        Type = null;
+        Brand = string.Empty;
+        Model = string.Empty;
+        Type = string.Empty;
         Price = 1;
         Category = null;
+        Description = string.Empty;
     }
 }

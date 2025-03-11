@@ -11,6 +11,9 @@ namespace TechStoreMVC.Database
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Basket> Baskets { get; set; }
         public DbSet<BasketItem> BasketItem { get; set; }
+        public DbSet<PaymentMethod> PaymentMethods { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
 
         public DatabaseContext(DbContextOptions options) : base(options)
         {

@@ -1,0 +1,55 @@
+﻿@using TechStoreMVC.Entities
+@using TechStoreMVC.Models.Basket
+@model OrderCreateModel
+
+@{
+	ViewBag.Title = "Checkout";
+}
+
+<h1 class="text-center">Finish your order 🩷</h1>
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-@TempData["MessageType"]" role="alert">
+        @TempData["Message"]
+    </div>
+}
+
+<form asp-action="Checkout">
+    <input type="hidden" asp-for="Id">
+    <div class="mb-3">
+        <label for="Firstname" class="form-label">Firstname</label>
+        <input asp-for="FirstName" type="text" class="form-control" id="Firstname">
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label for="Lastname" class="form-label">Lastname</label>
+        <input asp-for="LastName" type="text" class="form-control" id="Lastname">
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label for="Email" class="form-label">E-Mail</label>
+        <input asp-for="Email" type="email" class="form-control" id="Email">
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label for="Address" class="form-label">Address</label>
+        <input asp-for="Address" type="text" class="form-control" id="Address">
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+
+    <span>Payment Method</span><br>
+    <div class="d-flex flex-column gap-3">
+        <div class="form-floating">
+            <select asp-for="PaymentMethodId" class="form-select" id="floatingSelect">
+                <option selected>Platební metoda</option>
+                @foreach (PaymentMethod item in ViewBag.PaymentMethods)
+                {
+                    <option value="@item.Id">@item.Name</option>
+                }
+            </select>
+            <label for="floatingSelect">Vyberte preferovaný způsob platby</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Confirm & Order</button>
+    </div>
+</form>

@@ -1,15 +1,12 @@
 ﻿@using TechStoreMVC.Entities
-@using TechStoreMVC.Models.Category
-@model CategoryViewModel
+@using TechStoreMVC.Models.Product
+@model ProductToBasketModel
 
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
 @{
-	ViewData["Title"] = Model.Name;
+	ViewData["Title"] = Model.CategoryName;
 }
 
-<h1 class="text-center">@Model.Name</h1>
+<h1 class="text-center">@Model.CategoryName</h1>
 
 @if (TempData["Message"] != null)
 {
@@ -29,22 +26,26 @@
             <th scope="col">Model</th>
             <th scope="col">Price</th>
             <th></th>
+            <th scope="col">Add to basket</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (Product p in Model.Products)
+        @foreach (Product p in ViewBag.Products)
         {
-            <tr>
+            <tr class="align-middle">
                 @if (ViewBag.Role == "admin")
                 {
                     <td>@p.Id</td>
                 }
-                <td>@p.Brand</td>
+                <td class="e">@p.Brand</td>
                 <td>@p.Model</td>
-				<td>@p.Price</td>
+				<td>@p.PriceText</td>
+                <td><a class="btn btn-secondary">Product Details</a></td>
                 <td>
-                    <form asp-action="AddToBasket" asp-controller="Basket" asp-route-id="@p.Id" asp-route-category="@Model.Name">
-                        <input asp-for="Quantity" type="number">
+                    <form asp-action="AddProductToBasket" asp-controller="Basket">
+                        <input asp-for="Quantity" type="number" min="1" max="10" value="1">
+                        <input asp-for="CategoryName" type="hidden" value="@Model.CategoryName">
+                        <input asp-for="Id" type="hidden" value="@p.Id">
                         <button type="submit" class="btn btn-light">Přidat do košíku</button>
                     </form>
                 </td>

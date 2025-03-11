@@ -24,6 +24,7 @@ namespace TechStoreMVC.Entities
         public virtual Basket Basket { get; set; }
 
         public string CalculatedPrice => $"{Quantity * Product.Price} CZK";
+        public decimal CalculatedPriceNum => Quantity * Product.Price;
 
         public BasketItem(int id, Product product, int quantity, Basket basket)
         {

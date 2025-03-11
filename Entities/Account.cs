@@ -29,6 +29,8 @@ public class Account
     [StringLength(128)]
     public string? Email { get; set; }
 
+    public virtual List<Order> Orders { get; set; }
+
     public Account(int id, string username, string password, string role, string? email)
     {
         Id = id;
@@ -36,6 +38,7 @@ public class Account
         Password = password;
         Role = role;
         Email = email;
+        Orders = new List<Order>();
     }
 
     public Account()
@@ -45,5 +48,6 @@ public class Account
         Password = null!;
         Role = null!;
         Email = null;
+        Orders = new List<Order>();
     }
 }

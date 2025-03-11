@@ -14,6 +14,13 @@
 	</div>
 }
 
+@if (TempData["Message"] != null)
+{
+	<div class="alert alert-@TempData["MessageType"]" role="alert">
+		@TempData["Message"]
+	</div>
+}
+
 <table class="table">
 	<thead>
 		<tr>
@@ -50,4 +57,18 @@
 			</tr>
 		}
 	</tbody>
+	<tfoot>
+		<tr>
+			<td class="fw-bold">Total with VAT</td>
+			<td></td>
+			<td></td>
+			<td class="fw-bold text-success-emphasis">@Model.BasketItems.Sum(b => b.CalculatedPriceNum) CZK</td>
+		</tr>
+	</tfoot>
 </table>
+
+<div class="text-end">
+	<a asp-action="checkout" class="btn btn-success">To Checkout</a>
+</div>
+
+

@@ -1,0 +1,40 @@
+﻿@using TechStoreMVC.Models.Order
+@model List<OrderViewModel>
+@{
+	ViewBag.Title = "Order List";
+}
+
+<h1 class="text-center">Your Orders</h1>
+
+@if (TempData["Message"] != null)
+{
+	<div class="alert alert-@TempData["MessageType"]" role="alert">
+		@TempData["Message"]
+	</div>
+}
+
+<table class="table text-center">
+	<thead>
+		<tr>
+			<th scope="col">Order ID</th>
+			<th scope="col">Total Price</th>
+			<th scope="col">Delivery Address</th>
+			<th scope="col">Order Status</th>
+			<th scope="col"></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (OrderViewModel o in Model)
+		{
+			<tr class="align-middle">
+				<td>@o.Id</td>
+				<td>@o.TotalPrice CZK</td>
+				<td>@o.Address</td>
+				<td>@o.Status</td>
+				<td>
+					<a asp-action="Details" asp-controller="Order" asp-route-orderId="@o.Id" class="btn btn-light">Detaily objednávky</a>
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

@@ -1,0 +1,38 @@
+﻿@using TechStoreMVC.Models.Product
+@model ProductViewModel
+
+@{
+	ViewBag.Title = "Details";
+}
+
+<div class="container mt-10">
+	<div class="row">
+		<div class="col-6">
+			<img src="~/img/products/@(Model.Id)large.png" alt="Missing or Unloaded Picture" height="50%" />
+		</div>
+		<div class="col-6">
+			<h1 class="display-3">@Model.Brand @Model.Model</h1>
+			<p>Product Rating 10/10</p>
+			<p>@Model.Description</p>
+
+			<div>
+				<form asp-action="AddProductToBasket" asp-controller="Basket" class="d-flex gap-2">
+					<input asp-for="@Model.Quantity" type="number" min="1" max="5" value="1">
+					<input asp-for="@Model.Id" type="hidden" value="@Model.Id">
+					<button type="submit" class="btn btn-success w-100">Add to Basket</button>
+				</form>
+			</div>
+			
+		</div>
+	</div>
+</div>
+
+<div>
+	Recenze
+</div>
+
+<style>
+	.mt-10 {
+		margin-top: 10%;
+	}
+</style>

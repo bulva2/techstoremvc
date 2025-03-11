@@ -66,6 +66,7 @@ Thumbs.db
 *.[Cc]ache
 *[Rr]esharper*
 packages
+.vs
 NuGet.exe
 _[Ss]cripts
 *.exe

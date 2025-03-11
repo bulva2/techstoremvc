@@ -2,10 +2,11 @@
 using TechStoreMVC.Database;
 using TechStoreMVC.Entities;
 using TechStoreMVC.Models.Category;
+using TechStoreMVC.Models.Product;
 
 namespace TechStoreMVC.Controllers
 {
-    public class CategoryController : SecuredController
+    public class CategoryController : BaseController
     {
         private DatabaseContext _context;
 
@@ -28,8 +29,10 @@ namespace TechStoreMVC.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            CategoryViewModel categoryViewModel = new CategoryViewModel(category.Id, category.Name, category.Products);
-            return View(categoryViewModel);
+            List<Product> products = category.Products;
+            ViewBag.Products = products;
+
+            return View(new ProductToBasketModel(categoryName));
         }
     }
 }
