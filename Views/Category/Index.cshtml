@@ -3,7 +3,8 @@
 @model ProductToBasketModel
 
 @{
-	ViewData["Title"] = Model.CategoryName;
+    ViewData["Title"] = Model.CategoryName;
+    List<string> brands = ViewBag.Brands;
 }
 
 <h1 class="text-center">@Model.CategoryName</h1>
@@ -15,42 +16,81 @@
     </div>
 }
 
-<table class="table text-center">
-    <thead>
-        <tr>
-            @if (ViewBag.Role == "admin")
-            {
-                <th scope="col">#</th>
-            }
-            <th scope="col">Brand</th>
-            <th scope="col">Model</th>
-            <th scope="col">Price</th>
-            <th></th>
-            <th scope="col">Add to basket</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (Product p in ViewBag.Products)
-        {
-            <tr class="align-middle">
-                @if (ViewBag.Role == "admin")
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2 d-flex flex-column gap-3">
+            <h6 class="text-center">Price</h6>
+            <a asp-action="Index" asp-route-categoryName="@Model.CategoryName" asp-route-sort="price" asp-route-way="desc" class="btn btn-sm btn-primary">Sort By Price [Descending]</a>
+            <a asp-action="Index" asp-route-categoryName="@Model.CategoryName" asp-route-sort="price" asp-route-way="asc" class="btn btn-sm btn-primary">Sort By Price [Ascending]</a>
+
+            <form asp-action="Index" method="get">
+
+                @if (Context.Request.Query.ContainsKey("sort"))
                 {
-                    <td>@p.Id</td>
+                    <input type="hidden" name="sort" value="@Context.Request.Query["sort"]" />
                 }
-                <td class="e">@p.Brand</td>
-                <td>@p.Model</td>
-				<td>@p.PriceText</td>
-                <td><a class="btn btn-secondary">Product Details</a></td>
-                <td>
-                    <form asp-action="AddProductToBasket" asp-controller="Basket">
-                        <input asp-for="Quantity" type="number" min="1" max="10" value="1">
-                        <input asp-for="CategoryName" type="hidden" value="@Model.CategoryName">
-                        <input asp-for="Id" type="hidden" value="@p.Id">
-                        <button type="submit" class="btn btn-light">Přidat do košíku</button>
-                    </form>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                @if (Context.Request.Query.ContainsKey("way"))
+                {
+                    <input type="hidden" name="way" value="@Context.Request.Query["way"]" />
+                }
+
+                <input type="hidden" value="@Model.CategoryName" name="categoryName" />
+                <h6 class="text-center">Brands</h6>
+                <div class="d-flex flex-column gap-2">
+                    @for (int i = 0; i < brands.Count; i++)
+                    {
+                        <input type="checkbox" class="btn-check" id="btncheck@(i)" name="brands" value="@brands[i]" autocomplete="off">
+                        <label class="btn btn-outline-primary" for="btncheck@(i)">@brands[i]</label>
+                    }
+
+                    <button type="submit" class="btn btn-sm btn-success">Apply Filters</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-10">
+            <table class="table text-center">
+                <thead>
+                    <tr>
+                        @if (ViewBag.Role == "admin")
+                        {
+                            <th scope="col">#</th>
+                        }
+                        <th></th>
+                        <th scope="col">Brand</th>
+                        <th scope="col">Model</th>
+                        <th scope="col">Price</th>
+                        <th></th>
+                        <th scope="col">Add to basket</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Product p in ViewBag.Products)
+                    {
+                        <tr class="align-middle">
+                            @if (ViewBag.Role == "admin")
+                            {
+                                <td>@p.Id</td>
+                            }
+                            <td>
+                                <img src="/img/products/@(p.Id).png">
+                            </td>
+                            <td>@p.Brand</td>
+                            <td>@p.Model</td>
+                            <td>@p.PriceText</td>
+                            <td><a class="btn btn-secondary">Product Details</a></td>
+                            <td>
+                                <form asp-action="AddProductToBasket" asp-controller="Basket">
+                                    <input asp-for="Quantity" type="number" min="1" max="10" value="1">
+                                    <input asp-for="CategoryName" type="hidden" value="@Model.CategoryName">
+                                    <input asp-for="Id" type="hidden" value="@p.Id">
+                                    <button type="submit" class="btn btn-light">Přidat do košíku</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 

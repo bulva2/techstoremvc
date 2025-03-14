@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using TechStoreMVC.Database;
 using TechStoreMVC.Entities;
-using TechStoreMVC.Models.Category;
 using TechStoreMVC.Models.Product;
 
 namespace TechStoreMVC.Controllers
@@ -15,7 +14,7 @@ namespace TechStoreMVC.Controllers
             _context = context;
         }
 
-        public IActionResult Index(string categoryName)
+        public IActionResult Index(string categoryName, List<string> brands, string? sort, string? way)
         {
             if (categoryName == null)
             {
@@ -30,6 +29,21 @@ namespace TechStoreMVC.Controllers
             }
 
             List<Product> products = category.Products;
+            ViewBag.Brands = products.Select(p => p.Brand).ToList();
+
+            if (sort != null && sort == "price")
+            {
+                if (way == "desc")
+                    products = products.OrderByDescending(p => p.Price).ToList();
+                else if (way == "asc")
+                    products = products.OrderBy(p => p.Price).ToList();
+            }
+
+            if (brands.Count > 0)
+            {
+                products = products.Where(p => p.Brand != null && brands.Contains(p.Brand)).ToList();
+            }
+
             ViewBag.Products = products;
 
             return View(new ProductToBasketModel(categoryName));

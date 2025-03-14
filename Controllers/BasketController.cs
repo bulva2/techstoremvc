@@ -166,9 +166,7 @@ namespace TechStoreMVC.Controllers
             return RedirectToAction("Index", "Product");
         }
 
-        [HttpPost]
-        
-
+        //[HttpPost]
         //public IActionResult AddToBasket(CategoryViewModel categoryViewModel, int id, string category)
         //{
         //    string? username = HttpContext.Session.GetString("username");
