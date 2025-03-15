@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using TechStoreMVC.Attributes;
 using TechStoreMVC.Database;
 using TechStoreMVC.Entities;
+using TechStoreMVC.Models.Category;
 using TechStoreMVC.Models.Product;
 
 namespace TechStoreMVC.Controllers
 {
+    //Async experimenting ahead, but everything should work nicely
     public class CategoryController : BaseController
     {
         private DatabaseContext _context;
@@ -14,39 +18,86 @@ namespace TechStoreMVC.Controllers
             _context = context;
         }
 
-        public IActionResult Index(string categoryName, List<string> brands, string? sort, string? way)
+        [HttpPost]
+        [RequiresRole("admin")]
+        public async Task<IActionResult> Create(CategoryCreateModel ccm)
         {
-            if (categoryName == null)
-            {
-                return RedirectToAction("Index", "Home");
+            if (!ModelState.IsValid) {
+                TempData["Message"] = "Invalid data was entered";
+                TempData["MessageType"] = "danger";
+                return View(ccm);
             }
 
-            Category? category = _context.Categories.SingleOrDefault(c => c.Name == categoryName);
+            Category category = new Category(ccm.Id, ccm.Name);
+            await _context.Categories.AddAsync(category);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("ListCategories", "Administration");
+        }
+
+        [RequiresRole("admin")]
+        public IActionResult Create()
+        {
+            return View(new CategoryCreateModel());
+        }
+
+        [RequiresRole("admin")]
+        public async Task<IActionResult> Edit(int id)
+        {
+            Category? category = await _context.Categories.SingleOrDefaultAsync(c => c.Id == id);
 
             if (category == null)
             {
-                return RedirectToAction("Index", "Home");
+                TempData["Message"] = "There was an error retrieving this category!";
+                TempData["MessageType"] = "danger";
+                return RedirectToAction("List", "Categories");
             }
 
-            List<Product> products = category.Products;
-            ViewBag.Brands = products.Select(p => p.Brand).ToList();
+            return View(new CategoryCreateModel(category.Id, category.Name));
+        }
 
-            if (sort != null && sort == "price")
+        [HttpPost]
+        [RequiresRole("admin")]
+        public async Task<IActionResult> Edit(CategoryCreateModel ccm)
+        {
+            if (!ModelState.IsValid)
             {
-                if (way == "desc")
-                    products = products.OrderByDescending(p => p.Price).ToList();
-                else if (way == "asc")
-                    products = products.OrderBy(p => p.Price).ToList();
+                TempData["Message"] = "Invalid data was entered";
+                TempData["MessageType"] = "danger";
+                return View(ccm);
             }
 
-            if (brands.Count > 0)
+            Category? category = await _context.Categories.SingleOrDefaultAsync(c => c.Id == ccm.Id);
+
+            if (category == null)
             {
-                products = products.Where(p => p.Brand != null && brands.Contains(p.Brand)).ToList();
+                TempData["Message"] = "There was an error retrieving this category!";
+                TempData["MessageType"] = "danger";
+                return View(ccm);
             }
 
-            ViewBag.Products = products;
+            category.Name = ccm.Name;
+            _context.Categories.Update(category);
+            await _context.SaveChangesAsync();
 
-            return View(new ProductToBasketModel(categoryName));
+            return RedirectToAction("ListCategories", "Administration");
+        }
+
+        [RequiresRole("admin")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            Category? category = await _context.Categories.SingleOrDefaultAsync(c => c.Id == id);
+
+            if (category == null)
+            {
+                TempData["Message"] = "There was an error retrieving this category!";
+                TempData["MessageType"] = "danger";
+                return RedirectToAction("ListCategories", "Administration");
+            }
+
+            _context.Categories.Remove(category);
+            await _context.SaveChangesAsync();
+            return RedirectToAction("ListCategories", "Administration");
         }
     }
 }

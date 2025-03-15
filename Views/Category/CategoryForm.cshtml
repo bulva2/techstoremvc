@@ -1,0 +1,33 @@
+﻿@using TechStoreMVC.Models.Category
+@model CategoryCreateModel
+
+@{
+
+}
+
+@if (TempData["Message"] != null)
+{
+    <div class="alert alert-@TempData["MessageType"]" role="alert">
+        @TempData["Message"]
+    </div>
+}
+
+@if (Model.Name != string.Empty || Model.Name != null)
+{
+    <h1 class="text-center">Create Category</h1>
+}
+else
+{
+    <h1 class="text-center">Edit Category - @Model.Name</h1>
+}
+
+<form asp-controller="Category" asp-action="@ViewBag.Action">
+	<input type="hidden" asp-for="Id">
+    <div class="d-flex flex-column col-md-3 mx-auto gap-2 align-items-center">
+        <div>
+            <label for="Name" class="form-label">Category Name</label>
+            <input asp-for="Name" type="text" class="form-control" id="Name">
+        </div>
+        <button type="submit" class="btn btn-primary w-50">Save</button>
+    </div>
+</form>

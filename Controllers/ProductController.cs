@@ -16,12 +16,26 @@ namespace TechStoreMVC.Controllers
             _env = env;
         }
 
-        public IActionResult Index(List<string> brands, string? sort, string? way)
+        public IActionResult Index(string? categoryName, List<string> brands, string? way)
         {
             List<Product> products = _context.Products.ToList();
+
+            if (categoryName != null)
+            {
+                Category? category = _context.Categories.SingleOrDefault(c => c.Name == categoryName);
+
+                if (category != null)
+                {
+                    products = category.Products;
+                } else
+                {
+                    products = _context.Products.ToList();
+                }
+            }
+
             ViewBag.Brands = products.Select(p => p.Brand).ToList();
 
-            if (sort != null && sort == "price")
+            if (way != null)
             {
                 if (way == "desc")
                     products = products.OrderByDescending(p => p.Price).ToList();
@@ -35,7 +49,11 @@ namespace TechStoreMVC.Controllers
             }
 
             ViewBag.ProductViewModels = products.Select(p => new ProductViewModel(p.Id, p.Brand, p.Model, p.Type, p.Price, p.Description, 1)).ToList();
-            return View(new ProductToBasketModel());
+
+            if (categoryName != null)
+                return View(new ProductToBasketModel(categoryName));
+            else
+                return View(new ProductToBasketModel());
         }
 
         public IActionResult Details(int id)

@@ -3,9 +3,19 @@
 @{
 	ViewBag.Title = "Products";
 	List<string> brands = ViewBag.Brands;
+
+	string ascChecked = string.Empty;
+	string descChecked = "checked";
 }
 
-<h1 class="text-center">All Products</h1>
+@if (ViewBag.CategoryName != null)
+{
+	<h1 class="text-center">@Model.CategoryName</h1>
+} else
+{
+	<h1 class="text-center">All Products</h1>
+}
+
 
 @if (TempData["Message"] != null)
 {
@@ -13,29 +23,38 @@
 		@TempData["Message"]
 	</div>
 }
+
 <div class="container-fluid">
 	<div class="row">
 		<div class="col-2 d-flex flex-column gap-3">
-			<h6 class="text-center">Price</h6>
-			<a asp-action="Index" asp-route-sort="price" asp-route-way="desc" class="btn btn-sm btn-primary">Sort By Price [Descending]</a>
-			<a asp-action="Index" asp-route-sort="price" asp-route-way="asc" class="btn btn-sm btn-primary">Sort By Price [Ascending]</a>
-
 			<form asp-action="Index" method="get">
+				<h6 class="text-center">Price</h6>
 
-				@if (Context.Request.Query.ContainsKey("sort"))
-				{
-					<input type="hidden" name="sort" value="@Context.Request.Query["sort"]" />
-				}
+				@* Here I'm getting the previously selected price sorting *@
 				@if (Context.Request.Query.ContainsKey("way"))
 				{
-					<input type="hidden" name="way" value="@Context.Request.Query["way"]" />
+					string wayText = Context.Request.Query["way"].ToString();
+					descChecked = (wayText == "desc") ? "checked" : string.Empty;
+					ascChecked = (wayText == "asc") ? "checked" : string.Empty;
 				}
 
+				@* Ascending or Descending *@
+				<div class="btn-group" role="group">
+					<input type="radio" class="btn-check" name="way" id="btnradio1" value="desc" autocomplete="off" @descChecked>
+					<label class="btn btn-outline-primary" for="btnradio1">Sort by Price [From most expensive]</label>
+
+					<input type="radio" class="btn-check" name="way" id="btnradio2" value="asc" autocomplete="off" @ascChecked>
+					<label class="btn btn-outline-primary" for="btnradio2">Sort by Price [From the least expensive]</label>
+				</div>
+
+				<input type="hidden" value="@Model.CategoryName" name="categoryName" />
 				<h6 class="text-center">Brands</h6>
 				<div class="d-flex flex-column gap-2">
 					@for (int i = 0; i < brands.Count; i++)
 					{
-						<input type="checkbox" class="btn-check" id="btncheck@(i)" name="brands" value="@brands[i]" autocomplete="off">
+						string isChecked = Context.Request.Query["brands"].Contains(brands[i]) ? "checked" : string.Empty;
+
+						<input type="checkbox" class="btn-check" id="btncheck@(i)" name="brands" value="@brands[i]" autocomplete="off" @isChecked>
 						<label class="btn btn-outline-primary" for="btncheck@(i)">@brands[i]</label>
 					}
 

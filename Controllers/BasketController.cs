@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore.Storage;
 using TechStoreMVC.Database;
 using TechStoreMVC.Entities;
 using TechStoreMVC.Models.Basket;
-using TechStoreMVC.Models.Category;
 using TechStoreMVC.Models.Product;
 
 namespace TechStoreMVC.Controllers
@@ -165,44 +164,6 @@ namespace TechStoreMVC.Controllers
             TempData["MessageType"] = "success";
             return RedirectToAction("Index", "Product");
         }
-
-        //[HttpPost]
-        //public IActionResult AddToBasket(CategoryViewModel categoryViewModel, int id, string category)
-        //{
-        //    string? username = HttpContext.Session.GetString("username");
-
-        //    Account? acc = _context.Accounts.SingleOrDefault(a => a.Username == username);
-
-        //    if (acc == null)
-        //    {
-        //        return RedirectToAction("Login", "Auth");
-        //    }
-
-        //    Basket? myBasket = _context.Baskets.SingleOrDefault(b => b.AccountId == acc.Id);
-
-        //    if (myBasket == null)
-        //    {
-        //        myBasket = new Basket(0, acc);
-        //        _context.Baskets.Add(myBasket);
-        //        _context.SaveChanges();
-        //    }
-
-        //    Product? product = _context.Products.SingleOrDefault(p => p.Id == id);
-
-        //    if (product == null)
-        //    {
-        //        return RedirectToAction("Index", "Home");
-        //    }
-
-        //    BasketItem basketItem = new BasketItem(0, product, categoryViewModel.Quantity, myBasket);
-
-        //    _context.BasketItem.Add(basketItem);
-        //    _context.SaveChanges();
-
-        //    TempData["Message"] = $"{categoryViewModel.Quantity}x {product.Brand} {product.Model} has been added to your basket. ^^";
-        //    TempData["MessageType"] = "success";
-        //    return RedirectToAction("Index", "Category", new { categoryName = category });
-        //}
 
         public IActionResult Remove(int id)
         {
