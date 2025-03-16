@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TechStoreMVC.Database;
 using TechStoreMVC.Entities;
 using TechStoreMVC.Helper;
@@ -21,7 +22,7 @@ namespace TechStoreMVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(LoginViewModel loginViewModel)
+        public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -29,7 +30,7 @@ namespace TechStoreMVC.Controllers
             }
 
             string hashedPassword = SHA256Helper.HashPassword(loginViewModel.Password);
-            Account? acc = _context.Accounts.SingleOrDefault(a => (a.Username == loginViewModel.Username) && (a.Password == hashedPassword));
+            Account? acc = await _context.Accounts.SingleOrDefaultAsync(a => (a.Username == loginViewModel.Username) && (a.Password == hashedPassword));
 
             if (acc == null) {
                 return View(loginViewModel);
@@ -47,7 +48,7 @@ namespace TechStoreMVC.Controllers
         }
 
         [HttpPost]
-        public IActionResult Register(LoginViewModel loginViewModel)
+        public async Task<IActionResult> Register(LoginViewModel loginViewModel)
         {
             if (!ModelState.IsValid)
             {
@@ -57,7 +58,7 @@ namespace TechStoreMVC.Controllers
                 return View(loginViewModel);
             }
 
-            Account? existingAcc = _context.Accounts.SingleOrDefault(a => a.Username == loginViewModel.Username);
+            Account? existingAcc = await _context.Accounts.SingleOrDefaultAsync(a => a.Username == loginViewModel.Username);
             if (existingAcc != null)
             {
                 TempData["Message"] = "Entered username is already in use!";
@@ -65,8 +66,8 @@ namespace TechStoreMVC.Controllers
             }
 
             Account newAcc = new Account(0, loginViewModel.Username, SHA256Helper.HashPassword(loginViewModel.Password), "user", null);
-            _context.Accounts.Add(newAcc);
-            _context.SaveChanges();
+            await _context.Accounts.AddAsync(newAcc);
+            await _context.SaveChangesAsync();
 
             TempData["Message"] = "New account has been successfully created!";
             TempData["MessageType"] = "success";

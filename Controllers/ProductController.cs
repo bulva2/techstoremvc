@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TechStoreMVC.Database;
 using TechStoreMVC.Entities;
 using TechStoreMVC.Models.Product;
@@ -16,7 +17,7 @@ namespace TechStoreMVC.Controllers
             _env = env;
         }
 
-        public IActionResult Index(string? categoryName, List<string> brands, string? way)
+        public IActionResult Index(string? search, string? categoryName, List<string> brands, string? way)
         {
             List<Product> products = _context.Products.ToList();
 
@@ -48,7 +49,13 @@ namespace TechStoreMVC.Controllers
                 products = products.Where(p => p.Brand != null && brands.Contains(p.Brand)).ToList();
             }
 
+            if (search != null)
+            {
+                products = products.Where(p => p.FullText.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
             ViewBag.ProductViewModels = products.Select(p => new ProductViewModel(p.Id, p.Brand, p.Model, p.Type, p.Price, p.Description, 1)).ToList();
+
 
             if (categoryName != null)
                 return View(new ProductToBasketModel(categoryName));
@@ -56,9 +63,9 @@ namespace TechStoreMVC.Controllers
                 return View(new ProductToBasketModel());
         }
 
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            Product? p = _context.Products.SingleOrDefault(p => p.Id == id);
+            Product? p = await _context.Products.SingleOrDefaultAsync(p => p.Id == id);
 
             if (p == null)
             {
@@ -66,6 +73,8 @@ namespace TechStoreMVC.Controllers
                 TempData["MessageType"] = "danger";
                 return RedirectToAction("", "Home");
             }
+
+            ViewBag.Reviews = p.Reviews;
 
             return View(new ProductViewModel(p.Id, p.Brand, p.Model, p.Type, p.Price, p.Description, 0));
         }

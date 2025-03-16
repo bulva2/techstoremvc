@@ -1,4 +1,5 @@
-﻿@using TechStoreMVC.Models.Product
+﻿@using TechStoreMVC.Entities
+@using TechStoreMVC.Models.Product
 @model ProductViewModel
 
 @{
@@ -22,14 +23,34 @@
 					<button type="submit" class="btn btn-success w-100">Add to Basket</button>
 				</form>
 			</div>
-			
 		</div>
 	</div>
 </div>
 
-<div>
-	Recenze
-</div>
+
+<h2 class="text-center">Recenze</h2>
+@foreach (Review r in ViewBag.Reviews)
+{
+	<div class="container">
+		<div class="row">
+			<table class="table mx-auto">
+				<thead>
+					<tr>
+						<th scope="col"></th>
+						<th scope="col"></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>@r.Text</td>
+						<td>@(r.Rating)/5</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+}
+
 
 <style>
 	.mt-10 {

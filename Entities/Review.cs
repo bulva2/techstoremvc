@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.EntityFrameworkCore;
-
+ 
 namespace TechStoreMVC.Entities;
 
 [Table("tbReviews")]
@@ -23,12 +20,16 @@ public class Review
     [StringLength(2000)]
     public string Text { get; set; } = null!;
 
-    public Review(int id, Product product, string text)
+    [Column("rating")]
+    public int Rating { get; set; }
+
+    public Review(int id, Product product, string text, int rating)
     {
         Id = id;
         ProductId = product.Id;
         Product = product;
         Text = text;
+        Rating = rating;
     }
 
     public Review()
@@ -37,5 +38,6 @@ public class Review
         ProductId = 0;
         Product = null!;
         Text = null!;
+        Rating = 3;
     }
 }

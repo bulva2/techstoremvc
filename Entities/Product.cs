@@ -38,7 +38,11 @@ public class Product
     [ForeignKey("CategoryId")]
     public virtual Category? Category { get; set; }
 
+    public virtual List<Review> Reviews { get; set; }
+
     public string PriceText => $"{Price} CZK";
+
+    public string FullText => $"{Brand} {Model}";
 
     public Product(int id, string? brand, string model, string? type, decimal price, string description, Category? category)
     {
@@ -50,6 +54,7 @@ public class Product
         Price = price;
         Category = category;
         Description = description;
+        Reviews = new List<Review>();
     }
 
     public Product()
@@ -62,5 +67,6 @@ public class Product
         Price = 1;
         Category = null;
         Description = string.Empty;
+        Reviews = new List<Review>();
     }
 }
