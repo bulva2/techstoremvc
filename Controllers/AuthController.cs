@@ -26,6 +26,8 @@ namespace TechStoreMVC.Controllers
         {
             if (!ModelState.IsValid)
             {
+                TempData["Message"] = "Invalid data has been entered";
+                TempData["MessageType"] = "danger";
                 return View(loginViewModel);
             }
 
@@ -33,6 +35,8 @@ namespace TechStoreMVC.Controllers
             Account? acc = await _context.Accounts.SingleOrDefaultAsync(a => (a.Username == loginViewModel.Username) && (a.Password == hashedPassword));
 
             if (acc == null) {
+                TempData["Message"] = "Invalid username or password!";
+                TempData["MessageType"] = "danger";
                 return View(loginViewModel);
             }
 
@@ -63,6 +67,7 @@ namespace TechStoreMVC.Controllers
             {
                 TempData["Message"] = "Entered username is already in use!";
                 TempData["MessageType"] = "danger";
+                return View(loginViewModel);
             }
 
             Account newAcc = new Account(0, loginViewModel.Username, SHA256Helper.HashPassword(loginViewModel.Password), "user", null);

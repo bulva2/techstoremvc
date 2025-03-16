@@ -27,7 +27,7 @@ html {
 }
 
 body {
-  margin-bottom: 1500px;
+  margin-bottom: 100px;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {

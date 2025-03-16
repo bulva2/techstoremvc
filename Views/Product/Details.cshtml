@@ -13,7 +13,7 @@
 		</div>
 		<div class="col-6">
 			<h1 class="display-3">@Model.Brand @Model.Model</h1>
-			<p>Product Rating 10/10</p>
+			<p>Product Rating @ViewBag.Rating/5</p>
 			<p>@Model.Description</p>
 
 			<div>
@@ -29,6 +29,16 @@
 
 
 <h2 class="text-center">Recenze</h2>
+@{
+	List<Review> reviews = ViewBag.Reviews;
+	bool hasReviews = (reviews.Count > 0);
+}
+
+@if (!hasReviews)
+{
+	<p class="text-center">This product currently has no reviews</p>
+}
+
 @foreach (Review r in ViewBag.Reviews)
 {
 	<div class="container">
@@ -51,9 +61,25 @@
 	</div>
 }
 
+<form asp-action="postreview" method="post">
+	<div class="text-center vh-15 d-flex flex-column align-items-center gap-2">
+		<h2>Write a review</h2>
+		<textarea placeholder="I was completely satisfied with this product!" name="review" class="w-25 h-75"></textarea>
+		<div class="d-flex align-items-center justify-content-center gap-3">
+			<label for="stars">Star Rating</label>
+			<input min="1" max="5" placeholder="5" id="stars" name="stars" type="number">
+		</div>
+		<button class="btn btn-primary" type="submit">Submit review</button>
+	</div>
+</form>
+
 
 <style>
 	.mt-10 {
 		margin-top: 10%;
+	}
+
+	.vh-15 {
+		height: 15vh;
 	}
 </style>

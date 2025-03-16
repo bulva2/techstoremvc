@@ -74,9 +74,21 @@ namespace TechStoreMVC.Controllers
                 return RedirectToAction("", "Home");
             }
 
+            List<Review> reviews = p.Reviews;
             ViewBag.Reviews = p.Reviews;
 
-            return View(new ProductViewModel(p.Id, p.Brand, p.Model, p.Type, p.Price, p.Description, 0));
+            int rating = 0;
+
+            if (reviews.Count > 0)
+            {
+                reviews.ForEach(r => rating += r.Rating);
+                ViewBag.Rating = (decimal)(rating / reviews.Count);
+            } else
+            {
+                ViewBag.Rating = 0;
+            }
+
+                return View(new ProductViewModel(p.Id, p.Brand, p.Model, p.Type, p.Price, p.Description, 0));
         }
     }
 }
