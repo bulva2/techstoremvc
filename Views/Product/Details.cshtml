@@ -4,6 +4,7 @@
 
 @{
 	ViewBag.Title = "Details";
+	string rating = (ViewBag.Rating > 0) ? $"{ViewBag.Rating}/5" : "Unrated"; 
 }
 
 <div class="container mt-10">
@@ -13,7 +14,7 @@
 		</div>
 		<div class="col-6">
 			<h1 class="display-3">@Model.Brand @Model.Model</h1>
-			<p>Product Rating @ViewBag.Rating/5</p>
+			<p>Product Rating: @rating</p>
 			<p>@Model.Description</p>
 
 			<div>
@@ -39,29 +40,30 @@
 	<p class="text-center">This product currently has no reviews</p>
 }
 
-@foreach (Review r in ViewBag.Reviews)
-{
-	<div class="container">
-		<div class="row">
-			<table class="table mx-auto">
-				<thead>
-					<tr>
-						<th scope="col"></th>
-						<th scope="col"></th>
-					</tr>
-				</thead>
-				<tbody>
+<div class="container">
+	<div class="row">
+		<table class="table mx-auto">
+			<thead>
+				<tr>
+					<th scope="col"></th>
+					<th scope="col"></th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (Review r in ViewBag.Reviews)
+				{
 					<tr>
 						<td>@r.Text</td>
 						<td>@(r.Rating)/5</td>
 					</tr>
-				</tbody>
-			</table>
-		</div>
+				}
+			</tbody>
+		</table>
 	</div>
-}
+</div>
 
-<form asp-action="postreview" method="post">
+<form asp-controller="review" asp-action="PostReview" method="post">
+	<input type="hidden" name="id" value="@Model.Id">
 	<div class="text-center vh-15 d-flex flex-column align-items-center gap-2">
 		<h2>Write a review</h2>
 		<textarea placeholder="I was completely satisfied with this product!" name="review" class="w-25 h-75"></textarea>

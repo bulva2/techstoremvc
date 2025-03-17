@@ -9,14 +9,28 @@
 }
 
 <div class="d-flex justify-content-between align-items-center">
-    <div class="flex-grow-1 text-center">
-        @if ((Model.CategoryName!).Length > 0)
-        {
-            <h1>@Model.CategoryName</h1>
-        }
-        else
-        {
-            <h1>All Products</h1>
+	<div class="flex-grow-1 text-center">
+		@if ((Model.CategoryName!).Length > 0)
+		{
+			<div class="d-flex align-items-center justify-content-center gap-5">
+				@if (ViewBag.Role == "admin")
+				{
+					<a asp-action="Add" asp-controller="Product" class="btn btn-success">Add New Product</a>
+				}
+
+				<h1>@Model.CategoryName</h1>
+			</div>
+		}
+		else
+		{
+			<div class="d-flex align-items-center justify-content-center gap-5">
+				@if (ViewBag.Role == "admin")
+				{
+					<a asp-action="Add" asp-controller="Product" class="btn btn-success">Add New Product</a>
+				}
+				
+				<h1>All Products</h1>
+			</div>
         }
     </div>
 	<div>
@@ -91,6 +105,10 @@
 						<th scope="col">Price</th>
 						<th></th>
 						<th scope="col">Add to basket</th>
+						@if (ViewBag.Role == "admin")
+						{
+							<th scope="col">Admin Actions</th>
+						}
 					</tr>
 				</thead>
 				<tbody>
@@ -115,6 +133,15 @@
 									<button type="submit" class="btn btn-light">Add to basket</button>
 								</form>
 							</td>
+							@if (ViewBag.Role == "admin")
+							{
+								<td>
+									<div class="d-flex flex-column gap-1">
+										<a asp-action="Delete" asp-controller="Product" asp-route-id="@p.Id" class="btn btn-sm btn-danger">Delete Product</a>
+										<a asp-action="Edit" asp-controller="Product" asp-route-id="@p.Id" class="btn btn-sm btn-warning">Edit Product</a>
+									</div>
+								</td>
+							}
 						</tr>
 					}
 				</tbody>

@@ -17,6 +17,9 @@ public class Product
     [Column("categoryId", TypeName = "int(11)")]
     public int? CategoryId { get; set; }
 
+    [ForeignKey("CategoryId")]
+    public virtual Category? Category { get; set; }
+
     [Column("brand")]
     [StringLength(64)]
     public string? Brand { get; set; }
@@ -33,10 +36,8 @@ public class Product
     [Precision(11)]
     public decimal Price { get; set; }
 
+    [Column("description")]
     public string Description { get; set; }
-
-    [ForeignKey("CategoryId")]
-    public virtual Category? Category { get; set; }
 
     public virtual List<Review> Reviews { get; set; }
 
