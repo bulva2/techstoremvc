@@ -1,14 +1,22 @@
-﻿
+﻿using System.ComponentModel.DataAnnotations;
+
 namespace TechStoreMVC.Models.Product
 {
     public class ProductCreateModel
     {
+        [Required]
         public int Id { get; set; }
         public int? CategoryId { get; set; }
         public string? Brand { get; set; }
+        [Required]
+        [MinLength(1)]
+        [MaxLength(128)]
         public string Model { get; set; }
         public string? Type { get; set; }
+        [Required]
+        [Range(0.01, 99_999_999)]
         public decimal Price { get; set; }
+        [Required]
         public string Description { get; set; }
         public IFormFile? Image { get; set; }
         public IFormFile? LargeImage { get; set; }

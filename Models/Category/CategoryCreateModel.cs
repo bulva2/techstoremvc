@@ -1,8 +1,12 @@
-﻿namespace TechStoreMVC.Models.Category
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TechStoreMVC.Models.Category
 {
     public class CategoryCreateModel
     {
+        [Required]
         public int Id { get; set; }
+        [Required(ErrorMessage = "Name is required")]
         public string Name { get; set; }
 
         public CategoryCreateModel(int id, string name)
