@@ -8,20 +8,22 @@
 <h1 class="text-center">@ViewBag.Action Product</h1>
 
 <form asp-action="@ViewBag.Action" asp-controller="Product" enctype="multipart/form-data" class="col-md-6 mx-auto p-4 shadow rounded mt-3">
+	<input asp-for="Id" type="hidden">
+
 	<h4 class="text-center mb-4">Product Information</h4>
 	<div class="form-group mb-3">
 		<label asp-for="Brand" class="form-label">Brand</label>
-		<input asp-for="Brand" class="form-control" />
+		<input asp-for="Brand" class="form-control">
 		<span asp-validation-for="Brand" class="text-danger"></span>
 	</div>
 	<div class="form-group mb-3">
 		<label asp-for="Model" class="form-label">Model</label>
-		<input asp-for="Model" class="form-control" />
+		<input asp-for="Model" class="form-control">
 		<span asp-validation-for="Model" class="text-danger"></span>
 	</div>
 	<div class="form-group mb-3">
 		<label asp-for="Type" class="form-label">Type</label>
-		<input asp-for="Type" class="form-control" />
+		<input asp-for="Type" class="form-control">
 		<span asp-validation-for="Type" class="text-danger"></span>
 	</div>
 	<div class="form-group mb-3">
@@ -34,7 +36,7 @@
 		<input asp-for="Price" class="form-control" type="number">
 		<span asp-validation-for="Price" class="text-danger"></span>
 	</div>
-	<select asp-for="CategoryId" class="form-select">
+	<select asp-for="CategoryId" class="form-select mb-3">
 		<option selected>Select a category</option>
 		@foreach (Category c in ViewBag.Categories)
 		{
@@ -42,8 +44,15 @@
 		}
 	</select>
 	<div class="mb-3">
-		<label for="formFile" class="form-label text-primary">Only upload .png files</label>
 		<input asp-for="Image" class="form-control" type="file" id="formFile">
+		<label for="formFile" class="form-label text-primary">(Small Image) Only upload .png files</label>
+		<span asp-validation-for="Image" class="text-danger"></span>
+	</div>
+
+	<div class="mb-3">
+		<input asp-for="LargeImage" class="form-control" type="file" id="formFile2">
+		<label for="formFile2" class="form-label text-primary">(Large Image) Only upload .png files</label>
+		<span asp-validation-for="LargeImage" class="text-danger"></span>
 	</div>
 
 	<button type="submit" class="btn btn-outline-primary w-100">Save</button>

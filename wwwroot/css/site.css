@@ -17,17 +17,14 @@ html {
     margin-bottom: 20%;
 }
 
-.font-size24 {
-    font-size: 24px;
-}
-
 html {
   position: relative;
   min-height: 100%;
 }
 
 body {
-  margin-bottom: 100px;
+    height: 100vh;
+    margin-bottom: 200px;
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {

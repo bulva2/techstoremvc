@@ -5,14 +5,15 @@ namespace TechStoreMVC.Models.Product
     {
         public int Id { get; set; }
         public int? CategoryId { get; set; }
-        public string Brand { get; set; }
+        public string? Brand { get; set; }
         public string Model { get; set; }
-        public string Type { get; set; }
+        public string? Type { get; set; }
         public decimal Price { get; set; }
         public string Description { get; set; }
         public IFormFile? Image { get; set; }
+        public IFormFile? LargeImage { get; set; }
 
-        public ProductCreateModel(int id, int? categoryId, string brand, string model, string type, decimal price, string description, IFormFile? image)
+        public ProductCreateModel(int id, int? categoryId, string? brand, string model, string? type, decimal price, string description, IFormFile? image, IFormFile? largeImage)
         {
             Id = id;
             CategoryId = categoryId;
@@ -22,6 +23,7 @@ namespace TechStoreMVC.Models.Product
             Price = price;
             Description = description;
             Image = image;
+            LargeImage = largeImage;
         }
 
         public ProductCreateModel()
@@ -34,6 +36,7 @@ namespace TechStoreMVC.Models.Product
             Price = 0;
             Description = string.Empty;
             Image = null;
+            LargeImage = null;
         }
     }
 }

@@ -4,7 +4,6 @@ using TechStoreMVC.Attributes;
 using TechStoreMVC.Database;
 using TechStoreMVC.Entities;
 using TechStoreMVC.Models.Category;
-using TechStoreMVC.Models.Product;
 
 namespace TechStoreMVC.Controllers
 {

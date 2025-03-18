@@ -1,8 +1,4 @@
-﻿using System.Security.Policy;
-using System.Security.Principal;
-using TechStoreMVC.Entities;
-
-namespace TechStoreMVC.Models.Basket
+﻿namespace TechStoreMVC.Models.Basket
 {
     public class OrderCreateModel
     {

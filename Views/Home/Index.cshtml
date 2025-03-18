@@ -15,19 +15,19 @@
             <h5 class="display-5">Processors</h5>
             <ul class="list-unstyled">
                 <li class="font-size24">Gaming CPUs</li>
-                <li><a asp-action="Index" asp-controller="Product" asp-route-categoryName="CPU">Ryzen CPUs</a></li>
-                <li><a asp-action="Index" asp-controller="Product" asp-route-categoryName="CPU">Intel CPUs</a></li>
+                <li><a asp-action="Index" asp-controller="Product" asp-route-brands="AMD" asp-route-categoryName="CPU">Ryzen CPUs</a></li>
+                <li><a asp-action="Index" asp-controller="Product" asp-route-brands="Intel" asp-route-categoryName ="CPU">Intel CPUs</a></li>
 
                 <li class="font-size24 mt-2">Server CPUs</li>
-                <li><a asp-action="Index" asp-controller="Category" asp-route-categoryName="CPU">AMD Epyc CPUs</a></li>
-                <li><a asp-action="Index" asp-controller="Category" asp-route-categoryName="CPU">Intel Xeon CPUs</a></li>
+                <li><a asp-action="Index" asp-controller="Product" asp-route-categoryName="CPU">AMD Epyc CPUs</a></li>
+                <li><a asp-action="Index" asp-controller="Product" asp-route-categoryName="CPU">Intel Xeon CPUs</a></li>
             </ul>
         </div>
         <div class="col-md-4 text-center">
             <h5 class="display-5">Graphics Cards</h5>
             <ul class="list-unstyled">
                 <li class="font-size24">Gaming GPUs</li>
-                <li><a asp-action="Index" asp-controller="Product" asp-route-categoryName="GPU">NVIDIA GPUs</a></li>
+                <li><a asp-action="Index" asp-controller="Product" asp-route-brands="NVIDIA" asp-route-categoryName="GPU">NVIDIA GPUs</a></li>
                 <li><a asp-action="Index" asp-controller="Product" asp-route-categoryName="GPU">Radeon GPUs</a></li>
 
                 <li class="font-size24 mt-2">Server GPUs</li>

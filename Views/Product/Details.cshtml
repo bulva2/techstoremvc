@@ -4,13 +4,21 @@
 
 @{
 	ViewBag.Title = "Details";
-	string rating = (ViewBag.Rating > 0) ? $"{ViewBag.Rating}/5" : "Unrated"; 
+	string rating = (ViewBag.Rating > 0) ? $"{ViewBag.Rating}/5" : "Unrated";
+
+	bool largeExists = ViewBag.LargeImgExists;
 }
 
-<div class="container mt-10">
-	<div class="row">
+<div class="container mt-5perc">
+	<div class="row max-height600">
 		<div class="col-6">
-			<img src="~/img/products/@(Model.Id)large.png" alt="Missing or Unloaded Picture" height="50%" />
+			@if (largeExists)
+			{
+				<img src="~/img/products/@(Model.Id)large.png" alt="Missing or Unloaded Picture" height="50%" />
+			} else
+			{
+				<img src="~/img/products/@(Model.Id).png" alt="Missing or Unloaded Picture" height="80%" />
+			}
 		</div>
 		<div class="col-6">
 			<h1 class="display-3">@Model.Brand @Model.Model</h1>
@@ -29,7 +37,7 @@
 </div>
 
 
-<h2 class="text-center">Recenze</h2>
+<h2 class="text-center mt-5perc">Reviews</h2>
 @{
 	List<Review> reviews = ViewBag.Reviews;
 	bool hasReviews = (reviews.Count > 0);
@@ -66,7 +74,7 @@
 	<input type="hidden" name="id" value="@Model.Id">
 	<div class="text-center vh-15 d-flex flex-column align-items-center gap-2">
 		<h2>Write a review</h2>
-		<textarea placeholder="I was completely satisfied with this product!" name="review" class="w-25 h-75"></textarea>
+		<textarea placeholder="I was completely satisfied with this product!" name="review"></textarea>
 		<div class="d-flex align-items-center justify-content-center gap-3">
 			<label for="stars">Star Rating</label>
 			<input min="1" max="5" placeholder="5" id="stars" name="stars" type="number">
@@ -77,11 +85,23 @@
 
 
 <style>
-	.mt-10 {
-		margin-top: 10%;
+	.mt-5perc {
+		margin-top: 5%;
 	}
 
 	.vh-15 {
 		height: 15vh;
+	}
+
+	textarea {
+		resize: none;
+		width: 35%;
+		height: 80%;
+		min-width: 200px;
+		min-height: 100px;
+	}
+
+	.max-height600 {
+		max-height: 600px;
 	}
 </style>

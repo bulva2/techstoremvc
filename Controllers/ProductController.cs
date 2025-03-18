@@ -89,6 +89,10 @@ namespace TechStoreMVC.Controllers
                 ViewBag.Rating = 0;
             }
 
+            string filename = p.Id + "large.png";
+            string path = Path.Combine(_env.WebRootPath, "img", "products");
+
+            ViewBag.LargeImgExists = System.IO.File.Exists(Path.Combine(path, filename)) ? true : false;
             return View(new ProductViewModel(p.Id, p.Brand, p.Model, p.Type, p.Price, p.Description, 0));
         }
 
@@ -106,6 +110,16 @@ namespace TechStoreMVC.Controllers
 
             _context.Products.Remove(p);
             await _context.SaveChangesAsync();
+
+            string filePath = Path.Combine(_env.WebRootPath, "img", "products", $"{p.Id}.png");
+            string filePathLarge = Path.Combine(_env.WebRootPath, "img", "products", $"{p.Id}large.png");
+
+            if (System.IO.File.Exists(filePath))
+                System.IO.File.Delete(filePath);
+
+            if (System.IO.File.Exists(filePathLarge))
+                System.IO.File.Delete(filePathLarge);
+
             return RedirectToAction("Index", "Product");
         }
 
@@ -125,12 +139,31 @@ namespace TechStoreMVC.Controllers
                 if (pcm.Image.Length > 1024 * 1024 * 10)
                 {
                     ModelState.AddModelError("Image", "The uploaded file is too big!");
+                    ViewBag.Categories = await _context.Categories.ToListAsync();
                     return View(pcm);
                 }
 
                 if (Path.GetExtension(pcm.Image.FileName.ToLower()) != ".png")
                 {
                     ModelState.AddModelError("Image", "The uploaded file is not a PNG file!");
+                    ViewBag.Categories = await _context.Categories.ToListAsync();
+                    return View(pcm);
+                }
+            }
+
+            if (pcm.LargeImage != null)
+            {
+                if (pcm.LargeImage.Length > 1024 * 1024 * 10)
+                {
+                    ModelState.AddModelError("LargeImage", "The uploaded file is too big!");
+                    ViewBag.Categories = await _context.Categories.ToListAsync();
+                    return View(pcm);
+                }
+
+                if (Path.GetExtension(pcm.LargeImage.FileName.ToLower()) != ".png")
+                {
+                    ModelState.AddModelError("LargeImage", "The uploaded file is not a PNG file!");
+                    ViewBag.Categories = await _context.Categories.ToListAsync();
                     return View(pcm);
                 }
             }
@@ -146,6 +179,8 @@ namespace TechStoreMVC.Controllers
             {
                 TempData["Message"] = "There was an error obtaining the requested category!";
                 TempData["MessageType"] = "danger";
+                ViewBag.Categories = await _context.Categories.ToListAsync();
+
                 return RedirectToAction("Index", "Product");
             }
 
@@ -164,7 +199,132 @@ namespace TechStoreMVC.Controllers
                 }
             }
 
+            if (pcm.LargeImage != null)
+            {
+                string filename = p.Id + "large" + Path.GetExtension(pcm.LargeImage.FileName);
+                string path = Path.Combine(_env.WebRootPath, "img", "products");
+
+                using (FileStream fs = new FileStream(Path.Combine(path, filename), FileMode.Create))
+                {
+                    await pcm.LargeImage.CopyToAsync(fs);
+                }
+            }
+
             TempData["Message"] = "Product added successfully!";
+            TempData["MessageType"] = "success";
+            return RedirectToAction("Index", "Product");
+        }
+
+        [RequiresRole("admin")]
+        public async Task<IActionResult> Edit(int id)
+        {
+            Product? p = await _context.Products.SingleOrDefaultAsync(p => p.Id == id);
+
+            if (p == null)
+            {
+                TempData["Message"] = "There was an error obtaining the requested product!";
+                TempData["MessageType"] = "danger";
+
+                return RedirectToAction("Index", "Product");
+            }
+
+            ViewBag.Categories = await _context.Categories.ToListAsync();
+            return View(new ProductCreateModel(p.Id, p.CategoryId, p.Brand, p.Model, p.Type, p.Price, p.Description, null, null));
+        }
+
+        [RequiresRole("admin")]
+        [HttpPost]
+        public async Task<IActionResult> Edit(ProductCreateModel pcm)
+        {
+            Product? p = await _context.Products.SingleOrDefaultAsync(p => p.Id == pcm.Id);
+            if (p == null)
+            {
+                TempData["Message"] = "There was an error obtaining the requested product!";
+                TempData["MessageType"] = "danger";
+                return RedirectToAction("Index", "Product");
+            }
+
+            if (pcm.Image != null)
+            {
+                if (pcm.Image.Length > 1024 * 1024 * 10)
+                {
+                    ModelState.AddModelError("Image", "The uploaded file is too big!");
+                    ViewBag.Categories = await _context.Categories.ToListAsync();
+                    return View(pcm);
+                }
+                if (Path.GetExtension(pcm.Image.FileName.ToLower()) != ".png")
+                {
+                    ModelState.AddModelError("Image", "The uploaded file is not a PNG file!");
+                    ViewBag.Categories = await _context.Categories.ToListAsync();
+                    return View(pcm);
+                }
+            }
+
+            if (pcm.LargeImage != null)
+            {
+                if (pcm.LargeImage.Length > 1024 * 1024 * 10)
+                {
+                    ModelState.AddModelError("LargeImage", "The uploaded file is too big!");
+                    ViewBag.Categories = await _context.Categories.ToListAsync();
+                    return View(pcm);
+                }
+
+                if (Path.GetExtension(pcm.LargeImage.FileName.ToLower()) != ".png")
+                {
+                    ModelState.AddModelError("LargeImage", "The uploaded file is not a PNG file!");
+                    ViewBag.Categories = await _context.Categories.ToListAsync();
+                    return View(pcm);
+                }
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Categories = await _context.Categories.ToListAsync();
+                return View(pcm);
+            }
+
+            Category? category = await _context.Categories.SingleOrDefaultAsync(c => c.Id == pcm.CategoryId);
+            if (category == null)
+            {
+                TempData["Message"] = "There was an error obtaining the requested category!";
+                TempData["MessageType"] = "danger";
+                ViewBag.Categories = await _context.Categories.ToListAsync();
+                return View(pcm);
+            }
+
+            p.Brand = pcm.Brand;
+            p.Model = pcm.Model;
+            p.Type = pcm.Type;
+            p.Price = pcm.Price;
+            p.Description = pcm.Description;
+            p.Category = category;
+            await _context.SaveChangesAsync();
+
+            if (pcm.Image != null)
+            {
+                string filename = p.Id + Path.GetExtension(pcm.Image.FileName);
+                string path = Path.Combine(_env.WebRootPath, "img", "products");
+                string fullpath = Path.Combine(path, filename);
+
+                using (FileStream fs = new FileStream(fullpath, FileMode.Create))
+                {
+                    await pcm.Image.CopyToAsync(fs);
+                }
+            }
+
+            if (pcm.LargeImage != null)
+            {
+                string filename = p.Id + "large" + Path.GetExtension(pcm.LargeImage.FileName);
+                string path = Path.Combine(_env.WebRootPath, "img", "products");
+                string fullpath = Path.Combine(path, filename);
+
+                using (FileStream fs = new FileStream(fullpath, FileMode.Create))
+                {
+                    await pcm.LargeImage.CopyToAsync(fs);
+                }
+            }
+
+            TempData["Message"] = "Product edited successfully!";
             TempData["MessageType"] = "success";
             return RedirectToAction("Index", "Product");
         }
